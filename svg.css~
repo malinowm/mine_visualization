@@ -1,0 +1,62 @@
+.point {
+  fill: #18C3F9;
+  stroke-width: 2px;
+  stroke: #2850E5;
+  opacity: 0.5;
+}
+.point.hover{
+  stroke: pink;
+}
+
+.detail{
+  fill: #ccc; 
+  stroke: #000;
+}
+.tip{
+  fill: green; 
+  stroke: green;
+  font-size: 10pt;
+  background: #fff;
+}
+.pairwise_point{
+  fill: red;
+  stroke: blue;
+  stroke-width: 1px;
+  opacity: 0.5;
+}
+
+.axis path,
+.axis line {
+
+    fill: none;
+
+    stroke: black;
+
+    shape-rendering: crispEdges;
+
+}
+
+
+
+.axis text {
+
+    font-family: sans-serif;
+
+    font-size: 10px;
+
+}
+
+
+
+#plot {
+
+overflow: hidden
+
+
+
+}
+
+#list {
+
+overflow: auto
+}

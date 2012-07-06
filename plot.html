@@ -1,0 +1,49 @@
+<html>
+<head>
+ <script type="text/javascript" src="http://d3js.org/d3.v2.js"></script>
+ <script type="text/javascript" src="http://yates.webfactional.com/media/static/visualization/vis.js"></script>
+ <script src="http://code.jquery.com/jquery-1.4.2.js"></script>
+ <style type="text/css">
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
+
+.axis text {
+    font-family: sans-serif;
+    font-size: 10px;
+}
+
+#plot {
+border: 2px solid red;
+overflow: hidden
+
+}
+
+ </style>
+<script language = "javascript">
+  var x = window.opener.data[n].x;
+  var y = window.opener.data[n].y;
+  var studyid = window.opener.document.getElementById('studyid').value;
+  function drawPlot(){
+  makePlot(x,y,studyid);
+  }
+
+</script>
+</head>
+<body onLoad="drawPlot()">
+   <p> <select id="selectColorCode">
+    <option value="age">age</option>
+    <option value="gender">gender</option>
+
+    <option value="ancestry">ancestry</option>
+    <option value="id">id</option>
+    <option value="tissue">tissue</option>
+  </select></p>
+  <div id="plot" style="height:550px; width:770px;"></div>
+  <p></p>
+</body>
+</html>

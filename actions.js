@@ -1,0 +1,154 @@
+var data = [];
+var n = 0;
+function addPair(gene_1,gene_2,studyid){
+    var gene1correct = true;
+    var gene2correct = true;
+
+    url = "http://yates.webfactional.com/studies/geneExists?studyid="+studyid+"&gene=";
+    $.getJSON(url +""+ gene_1, function(dataret) {
+	    if (dataret.value == false){
+		gene1correct = false;
+	    } 
+	
+	    $.getJSON(url +""+ gene_2, function(dataret) {
+		    if (dataret.value == false){
+			gene2correct = false;
+		    }
+		    
+		   
+		    if ((gene1correct & gene2correct)){
+			var pair = {
+			    x : gene_1,
+			    y : gene_2
+			};
+			var unique = true;
+			for (var i = 0; i < data.length; i++) {
+			    if ((data[i].x == pair.x & data[i].y == pair.y) | (data[i].y == pair.x & data[i].x == pair.y)) {
+				unique = false;
+				break;
+			    }
+			}
+			if (pair.x == pair.y) {
+			    unique = false;
+			}
+			if (unique) {
+			    showImg(n);
+			    document.getElementById("plot").style.height = '500px';
+			    data[data.length] = pair;
+			    n++;
+		      	    makePlot(pair.x, pair.y, studyid, (n-1));
+			    $("span").prepend(function(){
+				    
+				    return "<div id ='img" +n+"'><img src='http://www.famfamfam.com/lab/icons/silk/icons/cross.png' align='right' onclick='remove("+n+")' class='delete"+n+"' title='remove graph'><img src='http://www.famfamfam.com/lab/icons/silk/icons/application.png' align='right' onclick='openWindow(" + n +")' title='new window' ></div><div id='plot' class='graph" + n + "'></div>";
+			     
+				});
+			    document.getElementById('img' + n + '').style.visibility = "hidden";
+			} else {
+			    $(document.getElementById('gene_1')).effect("highlight", {color:"#FF0000"}, 5000);
+			    $(document.getElementById('gene_2')).effect("highlight", {color:"#FF0000"}, 5000);
+			}
+		    } else {
+			if (!gene1correct){
+			    $(document.getElementById('gene_1')).effect("highlight", {color:"#FF0000"}, 5000);
+			}
+			if (!gene2correct){
+			    $(document.getElementById('gene_2')).effect("highlight", {color:"#FF0000"}, 5000);
+			}
+		    }
+		});
+	});
+}
+
+function openWindow(n){
+    var win = window.open("../../../media/static/visualization/plot.html");
+    win.n = n;
+    //win.document.write("<div id='plot' style='{height:500px; width:700px;}'>here is text</div>");
+    //win.onload = makePlot(data[n].x, data[n].y, studyid);
+    //win.focus()
+}
+function showPair(){
+ 
+}
+
+function remove(n){
+    $('.graph' + n +'').remove(); 
+    $('#this' + n + '').remove();
+    $('#img' + n + '').remove();
+    data[n].x = '';
+    data[n].y = '';
+}
+function showImg(n){
+    document.getElementById('img'+n+'').style.visibility = "visible";
+}
+
+
+$(document).ready(function() {
+	var studyid = document.getElementById('studyid').value;
+	//alert(studyid);
+	document.getElementById('img0').style.visibility = "hidden";
+	document.getElementById('studyid').style.visibility = "hidden";
+	$("#gene_1").autocomplete({
+	
+		source: function(request, response ) {
+		    url = "http://yates.webfactional.com/studies/ac?studyid="+studyid+"&term=" + request.term;
+		    var results;
+		    $.getJSON(url, function(data) {
+			    //results = data.value;		  
+			    if(!data.value.length){
+				var result = ['There are no matches for your gene'];
+				response(result);
+			    }
+			    else{
+				
+			    response(data.value);
+			    }
+						    
+			});
+
+		    // if (!results.length) {
+		    //	$("#no-results").text("No results found!");
+		    //	    } else {
+		    //	$("#no-results").empty();
+		    // }
+		    
+		    //response(results);
+
+
+
+		}
+		
+		//		source: ['test','t','this', 'auto', 'autocomplete']
+	    });
+	$("#gene_2").autocomplete({
+		source: function(request, response ) {
+                    url = "http://yates.webfactional.com/studies/ac?studyid="+studyid+"&term=" + request.term;
+
+                    $.getJSON(url, function(data) {
+                            response(data.value);
+                        });
+                },
+		//              source: ['test','t','this', 'auto', 'autocomplete']                                            \
+                                                                                                                                
+            });
+
+    });
+
+function testAlert(x,y,z){
+    var gene1correct = true;
+    var studyid = "GSE25935";
+    var gene = "VASH1";
+    url = "http://yates.webfactional.com/studies/geneExists/?studyid="+studyid+"&gene="+gene+"";
+    $.getJSON(url, function(dataret) {
+            alert('this');
+	});
+    alert(x);
+    alert(y);
+    alert(z);
+    makePlot("VASH1", "CARD16", "GSE25935", 0);
+}
+
+function clickclear(thisfield, defaulttext) {
+    if (thisfield.value == defaulttext) {
+	thisfield.value = "";
+    }
+}
